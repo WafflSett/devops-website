@@ -1,0 +1,63 @@
+# kubectl create secret docker-registry ghcr-auth-secret --docker-server=ghcr.io --docker-username=wafflsett --docker-password=
+
+apiVersion: apps/v1
+kind: Deployment
+metadata: 
+  name: k8s-cicd-test-deployment
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: k8s-cicd-test
+
+  template:
+    metadata:
+      labels:
+        app: k8s-cicd-test
+    spec:
+      containers:
+        - name: k8s-cicd-test-container
+          image: ghcr.io/wafflsett/k8s-cicd-test:1773058604
+          ports:
+            - containerPort: 80
+      imagePullSecrets:
+        - name: ghcr-auth-secret
+
+--- 
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: k8s-cicd-test-cluster-ip-service
+spec:
+  selector:
+    app: k8s-cicd-test
+  type: ClusterIP
+  ports:
+    - protocol: TCP
+      targetPort: 80
+      port: 80
+      
+---
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+    name: k8s-cicd-test-ingress
+
+spec:
+    ingressClassName: nginx
+    
+    rules:
+       - host: torosgergo-cicd-test.jcloud.jedlik.cloud
+         http:
+           paths:
+             - path: /
+               pathType: Prefix
+               backend:
+                 service:
+                   name: k8s-cicd-test-cluster-ip-service
+                   port:
+                     number: 80
+       
