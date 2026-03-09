@@ -24,7 +24,7 @@ jobs:
         docker build . --file Dockerfile  --tag ghcr.io/wafflsett/k8s-cicd-test:$IMAGE_TAG
         docker login ghcr.io -u wafflsett -p ${{ secrets.GHCR_TOKEN }}
         docker push ghcr.io/wafflsett/k8s-cicd-test:$IMAGE_TAG
-        sed -i 's|image: ghct.io/wafflsett/k8s-cicd-test:.*|image: ghcr.io/wafflsett/k8s-cicd-test:'"IMAGE_TAG"'|' deployment.yaml
+        sed -i 's|image: ghct.io/wafflsett/k8s-cicd-test:.*|image: ghcr.io/wafflsett/k8s-cicd-test:'"IMAGE_TAG"'|' test-deployment.yaml
 
 # TODO: kubectl apply
 #       copy config to secrets
