@@ -35,6 +35,10 @@ jobs:
         git diff --staged --quiet || git commit -m "Update image tag to $IMAGE_TAG"
         git push
 
+        mkdir -p ~/.kube
+        echo "${{ secrets.K8S_CONFIG }}" | base64 -d > ~/.kube/config
+        kubectl apply -f ./test-deployment.yaml
+
 # TODO: kubectl apply
 #       copy config to secrets
 #       "vissza" pusholni a módosított yaml-t
