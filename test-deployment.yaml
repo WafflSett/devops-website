@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
         - name: k8s-cicd-test-container
-          image: ghcr.io/wafflsett/k8s-cicd-test:1773058604
+          image: ghcr.io/wafflsett/k8s-cicd-test:1773218665
           ports:
             - containerPort: 80
       imagePullSecrets:
