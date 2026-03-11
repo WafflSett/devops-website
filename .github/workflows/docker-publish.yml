@@ -9,6 +9,9 @@ on:
   # lehetővé teszi, hogy "kézzel" elindítsam a folyamatot
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -25,6 +28,13 @@ jobs:
         docker login ghcr.io -u wafflsett -p ${{ secrets.GHCR_TOKEN }}
         docker push ghcr.io/wafflsett/k8s-cicd-test:$IMAGE_TAG
         sed -i 's|image: ghct.io/wafflsett/k8s-cicd-test:.*|image: ghcr.io/wafflsett/k8s-cicd-test:'"IMAGE_TAG"'|' test-deployment.yaml
+        
+        git config --global user.email "toros.gergo@gmail.com"
+        git config --global user.name "WafflSett"
+
+        git add test-deployment.yaml
+        git commit -m "update k8s deployment file"
+        git push
 
 # TODO: kubectl apply
 #       copy config to secrets
