@@ -31,10 +31,14 @@ jobs:
         
         git config --global user.email "toros.gergo@gmail.com"
         git config --global user.name "WafflSett"
-
         git add test-deployment.yaml
-        git commit -m "update k8s deployment file"
-        git push
+
+        if ! git diff --staged --quiet; then
+          git commit -m "update k8s deployment file"
+          git push
+        else
+          echo "No changes to commit!"
+        fi
 
 # TODO: kubectl apply
 #       copy config to secrets
